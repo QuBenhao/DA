@@ -42,7 +42,9 @@ body {
 		margin-top: 20px;
 		margin-right: 300px;
 	}
-	.a3{clear: both;}
+	.a3{
+        clear: both;
+    }
 	.a4{
 		background-color: #415b97;
 	}
