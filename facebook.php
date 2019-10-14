@@ -1,7 +1,15 @@
+<?php
+    session_start();
+    if(empty($_SESSION['email']))
+    {
+        echo '<script>window.location="logpage.php";</script>';
+        session_destroy();
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>Facebook</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -25,13 +33,14 @@ body {
 		float:left;
 		margin-top: 20px;
 		margin-left: 750px;
-		font-size: 25px;
-		text-decoration: none;
+        font-size: 25px;
+        text-decoration: none;
 	}
+	
 	.a2{
 		float: right;
 		margin-top: 20px;
-		margin-right: 200px;
+		margin-right: 300px;
 	}
 	.a3{clear: both;}
 	.a4{
@@ -45,20 +54,18 @@ body {
     <div class="a1"> 
 	  <img src="Facebook-2.png" width="50" height="50" alt="">acebook
 	</div>
-	<a class="home" href="/facebook.php" style="color:white">
-	<div class="home1">
-		<m>HOME</m>
-	</div>
+	<a class="home" href="facebook.php"  style="color:white">
+        <m>HOME</m>
 	</a>
-	<a class="a4" href="/friend.php" role="button" name="requests">
-	<div class = "a2">	
-		<img src="friend.png" width="40" height="30" alt="">
+	<a class="a4" href="friend.php" role="button" name="requests">
+	<div class = "a2">
+        <img src="friend.png" width="40" height="30" alt="">
 	</div>
 	</a>
 	<div class="a3"></div>
 	
   <form method="post" action="save.php"></form>
 </div>
-    <p><strong>Welocome:<br><?php echo $_POST["email"]; ?></strong></p>
+    <p><strong>Welocome:<br><?php echo $_SESSION["screenname"]; ?></strong></p>
 </body>
 </html>
