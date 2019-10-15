@@ -1,5 +1,5 @@
 <?php
-    
+    include 'mongodb.php';
 try{
     session_start();
     
@@ -10,33 +10,15 @@ try{
         session_destroy();
         session_start();
     }
-    // within php use mongo:27017 as the mongo server:port, not
-    // localhost:27020 that's for accessing from host computer
-    
-    $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
-    $db = $mng->MyDB;
-    $collection =$db->Members;
-    
-    $filter = [];
-    $options = [
-        'projection' => ['_id' => 0],
-        'sort' => [],
-    ];
-    
-    $query = new MongoDB\Driver\Query($filter, $options);
-    $rows = $mng->executeQuery('MyDB.Members', $query);
-    
-     foreach ($rows as $row)
-     {
-         if( $email == $row->email )
-         {
-             session_destroy();
-             echo '<html><head><Script Language="JavaScript">alert("The User already exists!");</Script></head></html>' .
-             "<meta http-equiv=\"refresh\" content=\"0;url=logpage.php\">";
-         }
-     }
-    
-    if(checkEmail($email))
+
+    $row = findEmail($email);
+    if($row!=null)
+    {
+        session_destroy();
+        echo '<html><head><Script Language="JavaScript">alert("The User already exists!");</Script></head></html>' .
+        "<meta http-equiv=\"refresh\" content=\"0;url=logpage.php\">";
+    }
+    else if(checkEmailformat($email))
     {
         $fullname = $_POST['fullname'];
         $screenname = $_POST['screenname'];
@@ -100,7 +82,7 @@ try{
     echo "On line:", $e->getLine(), "\n";
 }
     
-   function checkEmail($email){
+   function checkEmailformat($email){
         $preg = '/^(\w{1,25})@(\w{1,16})(\.(\w{1,4})){1,3}$/';
         if(preg_match($preg, $email)){
             return true;
