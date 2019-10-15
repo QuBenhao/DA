@@ -1,3 +1,12 @@
+<?php
+    include 'mongodb.php';
+    session_start();
+    if(isset($_SESSION['email']))
+    {
+        echo '<script>window.location="logpage.php";</script>';
+        session_destroy();
+    }
+?>
 <!doctype html>
 <html>
 <head>
