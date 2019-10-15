@@ -1,6 +1,6 @@
 <?php
     include 'mongodb.php';
-try{
+
     session_start();
     
     $email = $_POST['email'];
@@ -72,15 +72,6 @@ try{
             "<meta http-equiv=\"refresh\" content=\"0;url=register.php\">";
         }
     }
-    
-} catch (MongoDB\Driver\Exception\Exception $e) {
-    $filename = basename(__FILE__);
-    echo "The $filename script has experienced an error.\n";
-    echo "It failed with the following exception:\n";
-    echo "Exception:", $e->getMessage(), "\n";
-    echo "In file:", $e->getFile(), "\n";
-    echo "On line:", $e->getLine(), "\n";
-}
     
    function checkEmailformat($email){
         $preg = '/^(\w{1,25})@(\w{1,16})(\.(\w{1,4})){1,3}$/';
