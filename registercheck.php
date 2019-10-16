@@ -45,19 +45,8 @@
         'location' => $location,
         'visibility' => $visibility,
         ];
-        /*
-        foreach($doc as $t)
-        {
-            echo $t . "<br>";
-        }
-        */
-        $manager = new MongoDB\Driver\Manager("mongodb://mongo:27017/MyDB");
-
-        $bulk = new MongoDB\Driver\BulkWrite();
-        $bulk->insert($doc);
-
-        $writeConcern = new MongoDB\Driver\writeConcern(MongoDB\Driver\WriteConcern::MAJORITY, 100);
-        $result = $manager->executeBulkWrite('MyDB.Members', $bulk);
+        
+        $result = register($doc);
         
         if($result == true)
         {

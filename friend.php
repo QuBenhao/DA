@@ -101,7 +101,7 @@ body {
         margin-left: 15px;
         float:left;
     }
-    .friendrequest{
+    .userspost{
         margin-left:40px;
         width:70%;
         height: 100%;
@@ -128,9 +128,9 @@ body {
       <img src="Facebook-2.png" width="50" height="50" alt="">acebook
     </div>
     <div class="search">
-        <form method="post" action="search.php">
+        <form method="post" action="#">
             <div class="content">
-                <input type="text" style="width=160px; height: 28px;border:0px;box-sizing: border-box;outline: 1px solid rgba(0, 0, 0, 0); position: relative; width: 100%;z-index: 1;" placeholder="Enter Email address or Screen name" >
+                <input type="text" name="str" style="width=160px; height: 28px;border:0px;box-sizing: border-box;outline: 1px solid rgba(0, 0, 0, 0); position: relative; width: 100%;z-index: 1;" placeholder="Enter Email address or Screen name" >
             </div>
             <div class="butn">
                 <button type="submit" style="height: 28px;position: absolute">
@@ -141,20 +141,20 @@ body {
         </form>
     </div>
     <div class="a5">
-        <a class="home" href="facebook.php" style="color:white">
+        <a class="home" href="facebook.php" style="color:black">
             <m>HOME</m>
         </a>
     </div>
         <div class ="a6">
             <img src="/quit.png" width="40" height="30">
             <div class = "quitcontent">
-                <a href="logpage.php" style="text-decoration: none"><strong>Log out<br></strong></a>
+                <a href="logpage.php" style="text-decoration: none; color:black"><strong>Log out<br></strong></a>
             </div>
         </div>
             <div class = "a2">
                 <img src="friend.png" width="40" height="30" alt="">
                 <div class = "friendcontent">
-                    <a href="friend.php" style="text-decoration: none"><strong>Friend requests<br></strong></a>
+                    <a href="friend.php" style="text-decoration: none; color:black"><strong>Friend requests<br></strong></a>
                     <p>No new requests</p>
                 </div>
             </div>
@@ -166,11 +166,36 @@ body {
         <?php echo $_SESSION["screenname"] ?>
     </p>
     </div>
-    <div class="friendrequest">
+    <div class="userspost">
+        <?php
+            if($_POST["str"]!=null && $_POST["str"]!="")
+            {
+                $cursor = findEmail($_POST["str"]);
+                if($cursor!=null)
+                {
+                    echo $cursor->email;
+                    echo " ";
+                    echo $cursor->screenname;
+                    echo "<br>";
+                }
+                $cursor = findUsers($_POST["str"]);
+                if($cursor!=null)
+                {
+                    foreach($cursor as $document){
+                        echo $document->email;
+                        echo " ";
+                        echo $document->screenname;
+                        echo "<br>";
+                    }
+                }
+            }
+        ?>
     </div>
 </div>
 </body>
 </html>
+
+
 
 
 
