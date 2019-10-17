@@ -207,7 +207,6 @@ body {
                     echo ", Birthday:";
                     echo $cursor->dateofbirth->toDateTime()->format("Y-m-d");
                     echo "<br>";
-
         ?>
                     <div class="FriendButton">
                         <form action="addFriend.php" method="post">
@@ -248,6 +247,16 @@ body {
                         </div>
         <?php       }
                 }
+            }
+            else
+            {
+        ?>
+                <div class="content">
+                    
+                    <?php 
+                        getpost($_SESSION['email']);?>
+                </div>
+        <?php
             }
         ?>
     </div>

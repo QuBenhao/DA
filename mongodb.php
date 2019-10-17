@@ -94,17 +94,33 @@
     }
     
     function getFriends($user){
-        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017/MyDB");
+        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
+        $filter = [];
         $options = [
             'projection' => ['_id' => 0],
             'sort' => [],
         ];
-        
-        $searchQuery = array( 'recepient_email' => $user,
-                             'request_status'=> "accept");
-        $query = new MongoDB\Driver\Query($searchQuery,$options);
-        $rows = $mng->executeQuery('MyDB.FriendshipRequest',$query);
-        return rows;
+        $query = new MongoDB\Driver\Query($filter, $options);
+        $rows = $mng->executeQuery('MyDB.FriendshipRequest', $query);
+        $array = [];
+        foreach ($rows as $row)
+        {
+            if($row->requester_email == $user){
+                if($row->request_status == "accept"){
+                    array_push($array,$row->recepient_email);}
+            }
+            else if($row->recepient_email == $user){
+                if($row->request_status == "accept"){
+                    array_push($array,$row->requester_email);}
+            }
+        }
+        return $array;
+    }
+    
+    function isFriend($usera,$userb){
+        if(in_array($usera,getFriends($userb)))
+            return true;
+        return false;
     }
         
     function online($user){
@@ -127,6 +143,33 @@
         $writeConcern = new MongoDB\Driver\writeConcern(MongoDB\Driver\WriteConcern::MAJORITY, 100);
         $result = $manager->executeBulkWrite('MyDB.Members', $bulk);
         return $result;
+    }
+    
+    function getpost($user)
+    {
+        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
+        $filter = [];
+        $options = [
+            'projection' => ['_id' => 0],
+            'sort' => ['date'=>-1],
+        ];
+        $query = new MongoDB\Driver\Query($filter, $options);
+        $rows = $mng->executeQuery('MyDB.Post', $query);
+        $array = [];
+        if($rows!=null)
+        {
+            echo "<table>"; // start a table tag in the HTML
+            foreach ($rows as $row)
+            {
+               if(isFriend($user,$row->email))
+               {
+                  
+                       echo "<tr>" . findEmail($row->email)->screenname . "</tr><br><tr>" . $row->content . "</tr><br><tr>" . $row->time->toDateTime()->format("Y-m-d") . "</tr>";  //$row['index'] the index here is a field name
+               }
+            }
+
+            echo "</table>"; //Close the table in HTML
+        }
     }
     
 ?>
