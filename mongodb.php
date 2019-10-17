@@ -150,25 +150,30 @@
         $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
         $filter = [];
         $options = [
-            'projection' => ['_id' => 0],
-            'sort' => ['date'=>-1],
+            'sort' => ['time'=>-1],
         ];
         $query = new MongoDB\Driver\Query($filter, $options);
         $rows = $mng->executeQuery('MyDB.Post', $query);
         $array = [];
         if($rows!=null)
         {
-            echo "<table>"; // start a table tag in the HTML
+            echo "<br>POSTs";
+//            echo "<table>"; // start a table tag in the HTML
             foreach ($rows as $row)
             {
                if(isFriend($user,$row->email))
                {
-                  
-                       echo "<tr>" . findEmail($row->email)->screenname . "</tr><br><tr>" . $row->content . "</tr><br><tr>" . $row->time->toDateTime()->format("Y-m-d") . "</tr>";  //$row['index'] the index here is a field name
+                   echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                   echo "<div style=\"float:left;color:blue;\">User: " . findEmail($row->email)->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $row->content . "<br>";
+                   echo "<div style=\"float:right;margin-right:5px\"></div>";
+                   echo "<a href=\"addcomment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div>";
+                   echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"comment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"><button type=\"submit\" style=\"width:20px;height:21px;\"></button></form></div>";
+                   echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                   echo "<div style=\"clear:both\"></div>";
                }
             }
 
-            echo "</table>"; //Close the table in HTML
+//            echo "</table>"; //Close the table in HTML
         }
     }
     

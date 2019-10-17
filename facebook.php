@@ -74,7 +74,7 @@ body {
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 12px 16px;
       z-index: 1;
-        color: black;
+      color: black;
     }
     .a2:hover .friendcontent {
       display: block;
@@ -104,7 +104,7 @@ body {
     }
     .userspost{
         margin-left:40px;
-        width:70%;
+        width:60%;
         height: 100%;
         float:left;
         font-size:20px;
@@ -122,7 +122,20 @@ body {
     .a6:hover .quitcontent {
       display: block;
     }
-	
+
+	.createpost{
+		height: 80px;
+		width:700px;
+	}
+	.friend{
+		width:20%;
+		float:right;
+	}
+    .postcontent{
+        height:2000px;
+        width:700px;
+        
+    }
 </style>
 <body>
 <div class="header">
@@ -251,15 +264,23 @@ body {
             else
             {
         ?>
-                <div class="content">
-                    
-                    <?php 
-                        getpost($_SESSION['email']);?>
+                <div class="postcontent">
+                    <div class="createpost" style="margin-top:10px;border:solid 1px grey;">
+						<form method="post" action="createpost.php">
+							<input type="text" name="content" value="" style="box-sizing: border-box;width:600px;height:80px"></input>
+							<button type="submit" style="height:30px;font-size:20px;">Create</button>
+						</form>
+					</div>
+                    <?php getpost($_SESSION['email']);?>
                 </div>
         <?php
             }
         ?>
     </div>
+	<div class="friend">
+		<h2>Friends</h2>
+		
+	</div>
 </div>
 </body>
 </html>
