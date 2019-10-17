@@ -5,9 +5,8 @@
     $user_to = $_POST['user_to'];
     
     if(addFriend($user_from,$user_to))
-        echo '<html><head><Script Language="JavaScript">alert("Add friend successfully");</Script></head></html>' .
-        "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
+        echo "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
     else
-        echo '<html><head><Script Language="JavaScript">alert("Add Friend failed");</Script></head></html>' .
+    echo '<html><head><Script Language="JavaScript">alert("Add Friend failed");</Script></head></html>' .
         "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
 ?>

@@ -6,6 +6,7 @@
         echo '<script>window.location="logpage.php";</script>';
         session_destroy();
     }
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +70,7 @@ body {
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 250px;
+      min-width: 350px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 12px 16px;
       z-index: 1;
@@ -112,7 +113,7 @@ body {
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 160px;
+      min-width: 60px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 12px 16px;
       z-index: 1;
@@ -142,14 +143,14 @@ body {
         </form>
     </div>
     <div class="a5">
-        <a class="home" href="facebook.php" style="color:black">
+        <a class="home" href="facebook.php" style="color:white">
             <m>HOME</m>
         </a>
     </div>
         <div class ="a6">
             <img src="/quit.png" width="40" height="30">
             <div class = "quitcontent">
-                <a href="logpage.php" style="text-decoration: none; color:black"><strong>Log out<br></strong></a>
+                <a href=<?php echo "\"logout.php?email=" . urlencode($_SESSION['email']) . "\""?> style="text-decoration: none; color:black"><strong>Log out<br></strong></a>
             </div>
         </div>
             <div class = "a2">
@@ -158,7 +159,7 @@ body {
                     <a href="friend.php" style="text-decoration: none; color:black"><strong>Friend requests<br></strong></a>
                     <p><?php
                         if(getrequest($_SESSION['email'])!=null)
-                        echo getrequest($_SESSION['email']);
+                            echo getrequest($_SESSION['email']);
                         else
                             echo "No new request";
                         ?></p>
@@ -169,8 +170,27 @@ body {
 <div class="body">
     <div class="user">
     <p style="margin-top:5px"><strong>Welocome:<br></strong>
-        <?php echo $_SESSION["screenname"] ?>
+    <?php
+        $cursor = findEmail($_SESSION['email']);
+        echo $cursor->screenname . "<br><br>";
+        echo "Birth: " . $cursor->dateofbirth->toDateTime()->format("Y-m-d") . "<br><br>";
+        echo "Location: " . $cursor->location . "<br><br>";
+        echo "Sex: " . $cursor->gender . "<br><br>";
+        echo "Vis: " . strtoupper($cursor->visibility);
+    ?>
+
     </p>
+        <form method="POST" action="change.php">
+            <input type="hidden" name="email" value=<?php echo $cursor->email;?>>
+            <input type="hidden" name="password" value="<?php echo (isset($cursor->password) ? htmlspecialchars($cursor->password) : ''); ?>">
+            <input type="hidden" name="fullname" value="<?php echo (isset($cursor->fullname) ? htmlspecialchars($cursor->fullname) : ''); ?>">
+            <input type="hidden" name="screenname" value="<?php echo (isset($cursor->screenname) ? htmlspecialchars($cursor->screenname) : ''); ?>">
+            <input type="hidden" name="dateofbirth" value=<?php echo  $cursor->dateofbirth->toDateTime()->format("Y-m-d");?>>
+            <input type="hidden" name="gender" value=<?php echo $cursor->gender;?>>
+            <input type="hidden" name="location" value="<?php echo (isset($cursor->location) ? htmlspecialchars($cursor->location) : ''); ?>">
+            <input type="hidden" name="visibility" value=<?php echo $cursor->visibility;?>>
+        <button type="submit">Change</button>
+        </form>
     </div>
     <div class="userspost">
         <?php
@@ -187,6 +207,7 @@ body {
                     echo ", Birthday:";
                     echo $cursor->dateofbirth->toDateTime()->format("Y-m-d");
                     echo "<br>";
+
         ?>
                     <div class="FriendButton">
                         <form action="addFriend.php" method="post">
@@ -227,9 +248,6 @@ body {
                         </div>
         <?php       }
                 }
-
-                if(findEmail($_POST["str"]) == null && findUsers($_POST["str"]) == true)
-                    echo "No Result" . "<br>";
             }
         ?>
     </div>

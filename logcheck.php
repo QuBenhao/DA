@@ -15,8 +15,8 @@
             {
                 $_SESSION['email'] = $_POST['email'];
                 $_SESSION['screenname'] = $row->screenname;
-                echo '<html><head><Script Language="JavaScript">alert("Log in successfully");</Script></head></html>' .
-                "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
+                online($_SESSION['email']);
+                echo "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
             }
             else
             {
