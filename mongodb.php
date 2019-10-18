@@ -154,27 +154,125 @@
         ];
         $query = new MongoDB\Driver\Query($filter, $options);
         $rows = $mng->executeQuery('MyDB.Post', $query);
-        $array = [];
         if($rows!=null)
         {
             echo "<br>POSTs";
-//            echo "<table>"; // start a table tag in the HTML
             foreach ($rows as $row)
             {
-               if(isFriend($user,$row->email))
+               if(isFriend($user,$row->email) || $user==$row->email)
                {
-                   echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
-                   echo "<div style=\"float:left;color:blue;\">User: " . findEmail($row->email)->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $row->content . "<br>";
-                   echo "<div style=\"float:right;margin-right:5px\"></div>";
-                   echo "<a href=\"addcomment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div>";
-                   echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"comment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"><button type=\"submit\" style=\"width:20px;height:21px;\"></button></form></div>";
-                   echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
-                   echo "<div style=\"clear:both\"></div>";
+                   if(findEmail($row->email)->visibility!="private" || $user==$row->email)
+                   {
+                       echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                       echo "<div style=\"float:left;color:blue;\">User: " . findEmail($row->email)->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $row->content . "<br>";
+                       echo "<div style=\"float:right;margin-right:5px\"></div>";
+                       echo "<a href=\"comment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div></a>";
+                       echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
+                       echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                       echo "<div style=\"clear:both\"></div>";
+                   }
                }
+                
             }
-
-//            echo "</table>"; //Close the table in HTML
         }
     }
     
+    function getUserpost($user_from,$user_to)
+    {
+        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
+        $filter = ['email'=>$user_to];
+        $options = [
+            'sort' => ['time'=>-1],
+        ];
+        $query = new MongoDB\Driver\Query($filter, $options);
+        $rows = $mng->executeQuery('MyDB.Post', $query);
+        $doc = findEmail($user_to);
+        if($user_from == $user_to)
+        {
+            if($rows!=null)
+            {
+                echo "<br>POSTs";
+                foreach ($rows as $row)
+                {
+                    echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                    echo "<div style=\"float:left;color:blue;\">User: " . findEmail($row->email)->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $row->content . "<br>";
+                    echo "<div style=\"float:right;margin-right:5px\"></div>";
+                    echo "<a href=\"comment.php?email=" . urlencode($user_from) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div></a>";
+                    echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($user_from) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
+                    echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user_from) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                    echo "<div style=\"clear:both\"></div>";
+                }
+                    
+            }
+        }
+        else{
+            if((isFriend($user_from,$user_to) && $doc->visibility=="friends-only" )||$doc->visibility=="public")
+            {
+                foreach($rows as $row)
+                {
+                    echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                    echo "<div style=\"float:left;color:blue;\">User: " . $doc->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $row->content . "<br>";
+                    echo "<div style=\"float:right;margin-right:5px\"></div>";
+                    echo "<a href=\"comment.php?postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div></a>";
+                    echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($user_from) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
+                    echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user_from) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                    echo "<div style=\"clear:both\"></div>";
+                }
+            }
+        }
+    }
+    
+    function getcomment($postid)
+    {
+        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
+        $filter = ['postid'=>$postid];
+        $options = [
+            'sort' => ['time'=>-1],
+        ];
+        $query = new MongoDB\Driver\Query($filter, $options);
+        //comment
+        $rows = $mng->executeQuery('MyDB.Comments', $query);
+        
+        $search = ['_id'=>$postid];
+        $soptions =['sort' => []];
+        $squery = new MongoDB\Driver\Query($search, $soptions);
+        //post
+        $srows = $mng->executeQuery('MyDB.Post', $squery);
+        //comment comment
+
+        
+        if($srows!=null)
+        {
+            foreach($srows as $srow){
+                $temp = findEmail($srow->email);
+                echo "<div style=\"background-color:white;width=600px;height=100px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                echo "<div style=\"float:left;color:blue;\">User: " . $temp->screenname . "</div><div style=\"float:left;margin-left:30px;color:blue;\">Date:" . $srow->time->toDateTime()->format("Y-m-d H:i:s") . "</div><br>" . $srow->content . "<br>";
+                echo "<div style=\"float:right;margin-right:5px\"></div>";
+                echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($_SESSION['email']) . "&postid=" . $srow->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
+                echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($_SESSION['email']) . "&postid=" . $srow->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                echo "<div style=\"clear:both\"></div>";
+                break;
+            }
+        }
+        if($rows!=null)
+        {
+            foreach ($rows as $row)
+            {
+                $s = ['postid'=>$row->_id];
+                $cquery = new MongoDB\Driver\Query($s, $soptions);
+                $crows = $mng->executeQuery('MyDB.Comments', $cquery);
+                if($crows!=null)
+                    echo "<br>Comments<br>";
+                echo "<div style=\"background-color:white;width=600px;height=50px;margin-top:30px;border:solid 1px grey;font-size:20px\">";
+                echo "User:" . $row->user . ", Time:" . $row->time->toDateTime()->format("Y-m-d H:i:s") . "<br>comments:" . $row->comment . "<br>";
+                echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($_SESSION['email']) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
+                echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($_SESSION['email']) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
+                echo "<div style=\"clear:both\"></div>";
+                if($crows!=null)
+                {
+                    getcomment($row->_id);
+                }
+            }
+        }
+    }
 ?>

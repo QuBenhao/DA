@@ -6,6 +6,7 @@
         echo '<script>window.location="logpage.php";</script>';
         session_destroy();
     }
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,11 +70,11 @@ body {
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 160px;
+      min-width: 350px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 12px 16px;
       z-index: 1;
-        color: black;
+      color: black;
     }
     .a2:hover .friendcontent {
       display: block;
@@ -103,16 +104,16 @@ body {
     }
     .userspost{
         margin-left:40px;
-        width:70%;
+        width:60%;
         height: 100%;
         float:left;
+        font-size:20px;
     }
-    
      .quitcontent{
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 160px;
+      min-width: 60px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 12px 16px;
       z-index: 1;
@@ -120,6 +121,20 @@ body {
     }
     .a6:hover .quitcontent {
       display: block;
+    }
+
+    .createpost{
+        height: 80px;
+        width:700px;
+    }
+    .friend{
+        width:20%;
+        float:right;
+    }
+    .postcontent{
+        height:2000px;
+        width:700px;
+        
     }
 </style>
 <body>
@@ -141,21 +156,26 @@ body {
         </form>
     </div>
     <div class="a5">
-        <a class="home" href="facebook.php" style="color:black">
+        <a class="home" href="facebook.php" style="color:white">
             <m>HOME</m>
         </a>
     </div>
         <div class ="a6">
             <img src="/quit.png" width="40" height="30">
             <div class = "quitcontent">
-                <a href="logpage.php" style="text-decoration: none; color:black"><strong>Log out<br></strong></a>
+                <a href=<?php echo "\"logout.php?email=" . urlencode($_SESSION['email']) . "\""?> style="text-decoration: none; color:black"><strong>Log out<br></strong></a>
             </div>
         </div>
             <div class = "a2">
                 <img src="friend.png" width="40" height="30" alt="">
                 <div class = "friendcontent">
                     <a href="friend.php" style="text-decoration: none; color:black"><strong>Friend requests<br></strong></a>
-                    <p>No new requests</p>
+                    <p><?php
+                        if(getrequest($_SESSION['email'])!=null)
+                            echo getrequest($_SESSION['email']);
+                        else
+                            echo "No new request";
+                        ?></p>
                 </div>
             </div>
     <div class="a3"></div>
@@ -163,33 +183,123 @@ body {
 <div class="body">
     <div class="user">
     <p style="margin-top:5px"><strong>Welocome:<br></strong>
-        <?php echo $_SESSION["screenname"] ?>
+    <?php
+        $cursor = findEmail($_SESSION['email']);
+        echo $cursor->screenname . "<br><br>";
+        echo "Birth: " . $cursor->dateofbirth->toDateTime()->format("Y-m-d") . "<br><br>";
+        echo "Location: " . $cursor->location . "<br><br>";
+        echo "Sex: " . $cursor->gender . "<br><br>";
+        echo "Vis: " . strtoupper($cursor->visibility);
+    ?>
+
     </p>
+        <form method="POST" action="change.php">
+            <input type="hidden" name="email" value=<?php echo $cursor->email;?>>
+            <input type="hidden" name="password" value="<?php echo (isset($cursor->password) ? htmlspecialchars($cursor->password) : ''); ?>">
+            <input type="hidden" name="fullname" value="<?php echo (isset($cursor->fullname) ? htmlspecialchars($cursor->fullname) : ''); ?>">
+            <input type="hidden" name="screenname" value="<?php echo (isset($cursor->screenname) ? htmlspecialchars($cursor->screenname) : ''); ?>">
+            <input type="hidden" name="dateofbirth" value=<?php echo  $cursor->dateofbirth->toDateTime()->format("Y-m-d");?>>
+            <input type="hidden" name="gender" value=<?php echo $cursor->gender;?>>
+            <input type="hidden" name="location" value="<?php echo (isset($cursor->location) ? htmlspecialchars($cursor->location) : ''); ?>">
+            <input type="hidden" name="visibility" value=<?php echo $cursor->visibility;?>>
+        <button type="submit">Change</button>
+        </form>
     </div>
     <div class="userspost">
-        <?php
-            if($_POST["str"]!=null && $_POST["str"]!="")
-            {
-                $cursor = findEmail($_POST["str"]);
-                if($cursor!=null)
-                {
-                    echo $cursor->email;
-                    echo " ";
-                    echo $cursor->screenname;
-                    echo "<br>";
-                }
-                $cursor = findUsers($_POST["str"]);
-                if($cursor!=null)
-                {
-                    foreach($cursor as $document){
-                        echo $document->email;
-                        echo " ";
-                        echo $document->screenname;
-                        echo "<br>";
+       <?php
+                 if($_POST["str"]!=null && $_POST["str"]!="" )
+                 {
+                     $cursor = findEmail($_POST["str"]);
+                     if($cursor!=null && $_POST["str"]!=$_SESSION['email'])
+                     {
+                         echo "User Email:";
+                       //  echo "<a href=\"/" . $cursor->_id . "\" style=\"text-decoration: none; color:black\">" . $cursor->email . "</a>";
+                         echo "<a href=\"facebook.php?userpage=" . urlencode($cursor->email) . "\" style=\"text-decoration: none; color:black;\">" .  $cursor->email . "</a>" ;
+                         echo ", User Screen Name:";
+                         echo $cursor->screenname;
+                         echo ", Birthday:";
+                         echo $cursor->dateofbirth->toDateTime()->format("Y-m-d");
+                         echo "<br>";
+             ?>
+                         <div class="FriendButton">
+                             <form action="addFriend.php" method="post">
+                                 <input type="hidden" name="user_from" value=<?php echo $_SESSION["email"] ?>>
+                                 <input type="hidden" name="user_to" value=<?php echo $cursor->email ?>>
+                             <button class="" type="submit">
+                                 <i></i>Add Friend
+                             </button>
+                             </form>
+                         </div>
+             <?php
+                     }
+                 
+                     $cursor = findUsers($_POST["str"]);
+                     if($cursor!=null)
+                     {
+                         foreach($cursor as $document){
+                             $i+=1;
+                             if($document->email==$_SESSION['email'])
+                                 continue;
+                             echo "User Email:";
+                           //  echo "<a href=\"/" . $document->_id . "\" style=\"text-decoration: none; color:black\">" . $document->email . "</a>";
+                             echo "<a href=\"facebook.php?userpage=" . urlencode($document->email) . "\" style=\"text-decoration: none; color:black;\">" .  $document->email . "</a>" ;
+                             echo ", User Screen Name:";
+                             echo $document->screenname;
+                             echo ", Birthday:";
+                             echo $document->dateofbirth->toDateTime()->format("Y-m-d");
+                             echo "<br>";
+             ?>
+                             <div class="FriendButton">
+                                 <form action="addFriend.php" method="post">
+                                     <input type="hidden" name="user_from" value=<?php echo $_SESSION["email"] ?>>
+                                     <input type="hidden" name="user_to" value=<?php echo $document->email ?>>
+                                 <button class="" type="submit">
+                                     <i></i>Add Friend
+                                 </button>
+                                 </form>
+                             </div>
+              <?php
+                         }
+                     }
+                 }
+                  else if($_GET['userpage']!=null)
+                      getUserpost($_SESSION['email'],$_GET['userpage']);
+                  else{
+          
+                      if(getrequest($_SESSION['email'])!=null)
+                          echo getrequest($_SESSION['email']);
+                      else
+                          echo "No new request<br><br><br>";
+                      $friends = getFriends($_SESSION['email']);
+                      if($friends!=null){
+                        echo "<div class=\"postcontent\">Friends";
+                          foreach($friends as $friend){
+                              $frienddocument=findEmail($friend);
+                              echo "<div style=\"background-color:white;margin-top:30px\">Email:" . $frienddocument->email . "<br>";
+                              echo "Full Name:" . $frienddocument->fullname . "<br>";
+                              echo "Screen Name:" . $frienddocument->screenname . "<br>";
+                              echo "Birthday:" . $frienddocument->dateofbirth->toDateTime()->format("Y-m-d") . "<br>";
+                              echo "Gender:" . $frienddocument->gender . "<br>";
+                              echo "Status:" . $frienddocument->status . "<br>";
+                              echo "Address:" . $frienddocument->location . "</div>";
+                          }
+                        echo "</div>";
                     }
+                  }
+          ?>
+    </div>
+    <div class="friend">
+        <h2>Friends</h2>
+        <?php
+            $friends = getFriends($_SESSION['email']);
+            if($friends!=null){
+                foreach($friends as $friend){
+                    $frienddocument=findEmail($friend);
+                    echo $frienddocument->email . " ";
+                    echo $frienddocument->status . "<br>";
                 }
             }
-        ?>
+            ?>
     </div>
 </div>
 </body>

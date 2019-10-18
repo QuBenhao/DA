@@ -35,7 +35,8 @@
 
         $writeConcern = new MongoDB\Driver\writeConcern(MongoDB\Driver\WriteConcern::MAJORITY, 100);
         $result = $mng->executeBulkWrite('MyDB.Likes', $bulk);
-        echo "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
+        echo '<html><head><Script Language="JavaScript">alert("Like successfully");</Script></head></html>' .
+            "<meta http-equiv=\"refresh\" content=\"0;url=facebook.php\">";
         return;
     }
 ?>
