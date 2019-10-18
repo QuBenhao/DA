@@ -168,8 +168,12 @@
                        echo "<div style=\"float:right;margin-right:5px\"></div>";
                        echo "<a href=\"comment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div></a>";
                        echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($user) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
-                       echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
-                       echo "<div style=\"clear:both\"></div>";
+                       echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div>";
+                       if($user==$row->email)
+                       {
+                           echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"deletepost.php?email=" .  urlencode($_SESSION['email']) . "&postid=" . $row->_id . "\"><img src=\"delete.png\" width=\"30\" height=\"30\"></a></div>";
+                       }
+                       echo "</div><div style=\"clear:both\"></div>";
                    }
                }
                 
@@ -199,8 +203,9 @@
                     echo "<div style=\"float:right;margin-right:5px\"></div>";
                     echo "<a href=\"comment.php?email=" . urlencode($user_from) . "&postid=" . $row->_id . "\"><div style=\"float:right;text-decoration: none;\">Comment</div></a>";
                     echo "<div style=\"float:right;margin-right:15px;width:300px;height:23px\"><form method=\"post\" action=\"addcomment.php?email=" . urlencode($user_from) . "&postid=" . $row->_id . "\"><input type=\"text\" style=\"box-sizing: border-box;width:280px;height:23px\" placeholder=\"Write a comment\" name=\"comment\" value=\"\"></form></div>";
-                    echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user_from) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div></div>";
-                    echo "<div style=\"clear:both\"></div>";
+                    echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"like.php?email=" .  urlencode($user_from) . "&postid=" . $row->_id . "\"><img src=\"like.png\" width=\"30\" height=\"30\"></a></div>";
+                    echo "<div style=\"float:right;margin-right:15px\"><a role=\"button\" href=\"deletepost.php?email=" .  urlencode($user_from) . "&postid=" . $row->_id . "\"><img src=\"delete.png\" width=\"30\" height=\"30\"></a></div>";
+                    echo "</div><div style=\"clear:both\"></div>";
                 }
                     
             }
@@ -272,6 +277,37 @@
                 {
                     getcomment($row->_id);
                 }
+            }
+        }
+    }
+    
+   function deleteComments($postid)
+    {
+        $mng = new MongoDB\Driver\Manager("mongodb://mongo:27017");
+        $filter = ['postid'=>$postid];
+        $options = [
+            'sort' => ['time'=>-1],
+        ];
+        $query = new MongoDB\Driver\Query($filter, $options);
+        //comment
+        $rows = $mng->executeQuery('MyDB.Comments', $query);
+        //comment comment
+        if($rows!=null)
+        {
+            foreach ($rows as $row)
+            {
+                $s = ['postid'=>$row->_id];
+                $cquery = new MongoDB\Driver\Query($s, $soptions);
+                $crows = $mng->executeQuery('MyDB.Comments', $cquery);
+                if($crows!=null)
+                {
+                    deleteComments($row->_id);
+                }
+                $manager = new MongoDB\Driver\Manager("mongodb://mongo:27017/MyDB");
+                $bulk = new MongoDB\Driver\BulkWrite();
+                $bulk->delete($filter);
+                $writeConcern = new MongoDB\Driver\writeConcern(MongoDB\Driver\WriteConcern::MAJORITY, 100);
+                $result = $manager->executeBulkWrite('MyDB.Comments', $bulk);
             }
         }
     }

@@ -12,11 +12,7 @@
     'comment' => $comment,
     'time' => $time
     ];
-    
-//
-//    $user_from = $_GET['from'];
-//    $user_to = $_GET['to'];
-//
+
     $manager = new MongoDB\Driver\Manager("mongodb://mongo:27017/MyDB");
     $options = [
         'projection' => ['_id' => 0],
