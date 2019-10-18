@@ -91,7 +91,7 @@
 }
 	
 	html ._55r1 {
-    background: #FFFFFF url(/rsrc.php/v3/yO/r/YQNfPR9MJfx.png) repeat-x;
+    background: #FFFFFF repeat-x;
     border: 1px solid #dddfe2;
     color: #1d2129;
     font-family: Helvetica, Arial, sans-serif;
@@ -595,7 +595,6 @@
     top: 9px;
 }
 	.sp_DsFT2tc46le_3x {
-    background-image: url(/rsrc.php/v3/yq/r/CiXIjGpx88g.png);
     background-size: 22px 77px;
     background-repeat: no-repeat;
     display: inline-block;
@@ -882,29 +881,33 @@
 </head>
 
 <body>
+                                <?php $email = $_POST['email']; ?>
+                                
 	<div class="_n8 _3qx _8idq _8esf _8f3m _8fgk uiLayer _3qw" style="opacity: 1; min-width: 472px;">
 		<div class="_3ixn"></div>
 		<div class="_n9">
 			<div class="_n3">
 				<div class="_8ien">
-					<a role="button" href="logpage.php">
+					<a role="button" href="facebook.php">
 					<img class="_8idr img" src="/close.png" alt="" width="24" height="24" id="u_q_9">
 					</a>
 					<div class="pvl _52lp _59d-">
-						<div class="mbs _52lq fsl fwb fcb">Sign Up</div>
+						<div class="mbs _52lq fsl fwb fcb">Change Info <?php echo $email;?></div>
+                                                                
 						<div class="_52lr fsm fwn fcg">It's quick and easy.</div>
 					</div>
 						<div class="_58mf">
 							<div id="reg_box" class="registration_redesign">
 								<div class="_8fgl">
-									<form method="post" id="reg" name="reg" action="registercheck.php" onsubmit="">
+									<form method="post" id="reg" name="reg" action="changecheck.php" onsubmit="">
+                                        <input type="hidden" name="email" value=<?php echo $email ?> >
 										<div id="reg_form_box" class="large_form">
 											<div id="fullname_field" class="_1ixn">
 												<div class="clearfix _58mh">
 													<div class="mbm _1iy_ _a4y _3-90 lfloat _ohe">
 														<div class="_5dbb _5634" id="u_q_a">
 															<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-																<input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="fullname" value="" aria-required="true" placeholder="Full name" aria-label="full name" id="u_q_b" tabindex="0" aria-describedby="js_9d">
+                                                                <input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="fullname" value="<?php echo (isset($_POST['fullname']) ? htmlspecialchars($_POST['fullname']) : ''); ?>" aria-required="true" placeholder="Full name" aria-label="full name" id="u_q_b" tabindex="0" aria-describedby="js_9d">
 															</div>
 															<i class="_5dbc img sp_DsFT2tc46le_2x sx_a81301"></i>
 															<i class="_5dbd img sp_DsFT2tc46le_2x sx_08a758"></i>
@@ -914,29 +917,21 @@
 													<div class="mbm _1iy_ _a4y rfloat _ohf">
 														<div class="_5dbb" id="u_q_c">
 															<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-																<input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="screenname" value="" aria-required="true" placeholder="Screen name" aria-label="Screen name" id="u_q_d"></div>
+                                <input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="screenname" value="<?php echo (isset($_POST['screenname']) ? htmlspecialchars($_POST['screenname']) : ''); ?>" aria-required="true" placeholder="Screen name" aria-label="Screen name" id="u_q_d"></div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="mbm _a4y" id="u_q_e">
-												<div class="_5dbb" id="u_q_f">
-													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-														<input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="email" value="" aria-required="true" placeholder="Email address" aria-label="email address" id="u_q_g">
-													</div>
-													<i class="_5dbc img sp_DsFT2tc46le_2x sx_a81301"></i>
-													<i class="_5dbd img sp_DsFT2tc46le_2x sx_08a758"></i>
-													<div class="_1pc_"></div></div>
-											</div>
-											<div class="mbm _br- _a4y hidden_elem" id="u_q_k">
-												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-													<input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="address" value="" placeholder="Address" aria-label="location" id="u_q_l">
-												</div>
-											</div>
+
+                                            <div class="mbm _br- _a4y hidden_elem" id="u_q_k">
+                                                <div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+                                                    <input type="text" class="inputtext _58mg _5dba _2ph-" data-type="text" name="address" value="<?php echo (isset($_POST['location']) ? htmlspecialchars($_POST['location']) : ''); ?>" placeholder="Address" aria-label="location" id="u_q_l">
+                                                </div>
+                                            </div>
 											<div class="mbm _br- _a4y" id="password_field">
 												<div class="_5dbb" id="u_q_m">
 													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-														<input type="password" class="inputtext _58mg _5dba _2ph-" data-type="password" autocomplete="new-password" name="password" aria-required="true" placeholder="New password" aria-label="New password" id="u_q_n"></div>
+														<input type="password" class="inputtext _58mg _5dba _2ph-" data-type="password" autocomplete="new-password" name="password" aria-required="true" placeholder="New password" aria-label="New password" id="u_q_n" value="<?php echo (isset($_POST['password']) ? htmlspecialchars($_POST['password']) : ''); ?>"></div>
 													<i class="_5dbc img sp_DsFT2tc46le_2x sx_a81301"></i>
 													<i class="_5dbd img sp_DsFT2tc46le_2x sx_08a758"></i>
 													<div class="_1pc_"></div>
@@ -945,6 +940,7 @@
 											<div class="_58mq _5dbb" id="birthday_wrapper">
 												<div class="mtm mbs _2_68 _7-1r">Birthday</div>
 												<div class="_5k_5">
+                                                    <input type="hidden" name="dateofbirth" value=<?php echo $_POST['dateofbirth'] ?>>
 													<span class="_5k_4" data-type="selectors" data-name="birthday_wrapper" id="u_q_o">
 														<span>
 															<select aria-label="Day" name="birthday_day" id="day" title="Day" class="_5dba _8esg">
@@ -957,13 +953,13 @@
 																<option value="6">6</option>
 																<option value="7">7</option>
 																<option value="8">8</option>
-																<option value="9">9</option><option value="10"  selected="1">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+																<option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
 															<select aria-label="Month" name="birthday_month" id="month" title="Month" class="_5dba _8esg">
-																<option value="0">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8"  selected="1">Aug</option><option value="9">Sept</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec
+																<option value="0">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sept</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec
 																</option>
 															</select>
 															<select aria-label="Year" name="birthday_year" id="year" title="Year" class="_5dba _8esg">
-																<option value="0">Year</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000" >2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996" selected="1">1996</option><option value="1995">1995</option><option value="1994" >1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option><option value="1959">1959</option><option value="1958">1958</option><option value="1957">1957</option><option value="1956">1956</option><option value="1955">1955</option><option value="1954">1954</option><option value="1953">1953</option><option value="1952">1952</option><option value="1951">1951</option><option value="1950">1950</option><option value="1949">1949</option><option value="1948">1948</option><option value="1947">1947</option><option value="1946">1946</option><option value="1945">1945</option><option value="1944">1944</option><option value="1943">1943</option><option value="1942">1942</option><option value="1941">1941</option><option value="1940">1940</option><option value="1939">1939</option><option value="1938">1938</option><option value="1937">1937</option><option value="1936">1936</option><option value="1935">1935</option><option value="1934">1934</option><option value="1933">1933</option><option value="1932">1932</option><option value="1931">1931</option><option value="1930">1930</option><option value="1929">1929</option><option value="1928">1928</option><option value="1927">1927</option><option value="1926">1926</option><option value="1925">1925</option><option value="1924">1924</option><option value="1923">1923</option><option value="1922">1922</option><option value="1921">1921</option><option value="1920">1920</option><option value="1919">1919</option><option value="1918">1918</option><option value="1917">1917</option><option value="1916">1916</option><option value="1915">1915</option><option value="1914">1914</option><option value="1913">1913</option><option value="1912">1912</option><option value="1911">1911</option><option value="1910">1910</option><option value="1909">1909</option><option value="1908">1908</option><option value="1907">1907</option><option value="1906">1906</option><option value="1905">1905</option>
+																<option value="0">Year</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000" >2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994" >1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option><option value="1959">1959</option><option value="1958">1958</option><option value="1957">1957</option><option value="1956">1956</option><option value="1955">1955</option><option value="1954">1954</option><option value="1953">1953</option><option value="1952">1952</option><option value="1951">1951</option><option value="1950">1950</option><option value="1949">1949</option><option value="1948">1948</option><option value="1947">1947</option><option value="1946">1946</option><option value="1945">1945</option><option value="1944">1944</option><option value="1943">1943</option><option value="1942">1942</option><option value="1941">1941</option><option value="1940">1940</option><option value="1939">1939</option><option value="1938">1938</option><option value="1937">1937</option><option value="1936">1936</option><option value="1935">1935</option><option value="1934">1934</option><option value="1933">1933</option><option value="1932">1932</option><option value="1931">1931</option><option value="1930">1930</option><option value="1929">1929</option><option value="1928">1928</option><option value="1927">1927</option><option value="1926">1926</option><option value="1925">1925</option><option value="1924">1924</option><option value="1923">1923</option><option value="1922">1922</option><option value="1921">1921</option><option value="1920">1920</option><option value="1919">1919</option><option value="1918">1918</option><option value="1917">1917</option><option value="1916">1916</option><option value="1915">1915</option><option value="1914">1914</option><option value="1913">1913</option><option value="1912">1912</option><option value="1911">1911</option><option value="1910">1910</option><option value="1909">1909</option><option value="1908">1908</option><option value="1907">1907</option><option value="1906">1906</option><option value="1905">1905</option>
 															</select>
 														</span>
 													</span>
@@ -973,6 +969,7 @@
 												</div>
 											</div>
 											<div class="mtm _5wa2 _5dbb" id="u_q_p">
+                                                <input type="hidden" name="_gender" value=<?php echo $_POST['gender'] ?>>
 												<div class="mtm mbs _2_68 _7-1r">Gender</div>
 												<span class="_5k_3" data-type="radio" data-name="gender_wrapper" id="u_q_q">
                                                     <input type="hidden" name="sex" value="0">
@@ -987,8 +984,18 @@
 												</span>
 												<div class="_1pc_"></div>
 											</div>
+											<div class="mtm _5wa2 _5dbb" id="u_3_p">
+                                <div class="mtm mbs _2_68 _7-1r">Visibility
+                                </div>
+                                <input type="hidden" name="_visibility" value=<?php echo $_POST['visibility'] ?>>
+                                <span class="_5k_3" data-type="radio" data-name="visibility" id="u_3_q">
+                                    <input type="hidden" name="visibility" value="0">
+                                <span class="_5k_2 _5dba"><label class="_58mt" for="u_3_4">Private</label>
+                                <input type="radio" class="_8esa" name="visibility" value="1" id="u_3_4"></span>
+                                <span class="_5k_2 _5dba">
+                                <label class="_58mt" for="u_3_5">Friends</label><input type="radio" class="_8esa" name="visibility" value="2" id="u_3_5"></span><span class="_5k_2 _5dba"><label class="_58mt" for="u_3_6">Public</label><input type="radio" class="_8esa" name="visibility" value="3" id="u_3_6"></span></span><i class="_5dbc _8esb img sp_DsFT2tc46le_2x sx_a81301"></i><i class="_5dbd _8esc img sp_DsFT2tc46le_2x sx_08a758"></i><div class="_1pc_"></div></div>
 											<div class="_1lch">
-												<button type="submit" class="_6j mvm _6wk _6wl _58mi _3ma _6o _6v" id="u_q_u">Sign Up</button>
+												<button type="submit" class="_6j mvm _6wk _6wl _58mi _3ma _6o _6v" id="u_q_u">Submit</button>
 											</div>
 										</div>
 									</form>

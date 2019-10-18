@@ -123,14 +123,14 @@ body {
       display: block;
     }
 
-	.createpost{
-		height: 80px;
-		width:700px;
-	}
-	.friend{
-		width:20%;
-		float:right;
-	}
+    .createpost{
+        height: 80px;
+        width:700px;
+    }
+    .friend{
+        width:20%;
+        float:right;
+    }
     .postcontent{
         height:2000px;
         width:700px;
@@ -206,84 +206,14 @@ body {
         </form>
     </div>
     <div class="userspost">
-        <?php
-            if($_POST["str"]!=null && $_POST["str"]!="" )
-            {
-                $cursor = findEmail($_POST["str"]);
-                if($cursor!=null && $_POST["str"]!=$_SESSION['email'])
-                {
-                    echo "User Email:";
-                  //  echo "<a href=\"/" . $cursor->_id . "\" style=\"text-decoration: none; color:black\">" . $cursor->email . "</a>";
-                    echo "<a href=\"facebook.php?userpage=" . urlencode($cursor->email) . "\" style=\"text-decoration: none; color:black;\">" .  $cursor->email . "</a>" ;
-                    echo ", User Screen Name:";
-                    echo $cursor->screenname;
-                    echo ", Birthday:";
-                    echo $cursor->dateofbirth->toDateTime()->format("Y-m-d");
-                    echo "<br>";
-        ?>
-                    <div class="FriendButton">
-                        <form action="addFriend.php" method="post">
-                            <input type="hidden" name="user_from" value=<?php echo $_SESSION["email"] ?>>
-                            <input type="hidden" name="user_to" value=<?php echo $cursor->email ?>>
-                    	<button class="" type="submit">
-                    		<i></i>Add Friend
-						</button>
-                        </form>
-                    </div>
-        <?php
-                }
-            
-                $cursor = findUsers($_POST["str"]);
-                if($cursor!=null)
-                {
-                    foreach($cursor as $document){
-                        $i+=1;
-                        if($document->email==$_SESSION['email'])
-                            continue;
-                        echo "User Email:";
-                      //  echo "<a href=\"/" . $document->_id . "\" style=\"text-decoration: none; color:black\">" . $document->email . "</a>";
-                        echo "<a href=\"facebook.php?userpage=" . urlencode($document->email) . "\" style=\"text-decoration: none; color:black;\">" .  $document->email . "</a>" ;
-                        echo ", User Screen Name:";
-                        echo $document->screenname;
-                        echo ", Birthday:";
-                        echo $document->dateofbirth->toDateTime()->format("Y-m-d");
-                        echo "<br>";
-        ?>
-                        <div class="FriendButton">
-                            <form action="addFriend.php" method="post">
-                                <input type="hidden" name="user_from" value=<?php echo $_SESSION["email"] ?>>
-                                <input type="hidden" name="user_to" value=<?php echo $document->email ?>>
-                            <button class="" type="submit">
-                                <i></i>Add Friend
-                            </button>
-                            </form>
-                        </div>
-         <?php
-                    }
-                }
-            }
-             else if($_GET['userpage']!=null)
-                 getUserpost($_SESSION['email'],$_GET['userpage']);
-            else
-            {
-        ?>
-                <div class="postcontent">
-                    <div class="createpost" style="margin-top:10px;border:solid 1px grey;">
-						<form method="post" action="createpost.php">
-                            <input type="hidden" name="user" value=<?php echo $_SESSION['email'] ?>>
-                            <input type="text" name="content" value="" placeholder=<?php echo "What's&nbsp;on&nbsp;your&nbsp;mind," . $_SESSION['screenname'] ?>  style="box-sizing: border-box;width:600px;height:80px"></input>
-							<button type="submit" style="height:30px;font-size:20px;">Create</button>
-						</form>
-					</div>
-                    <?php getpost($_SESSION['email']);?>
-                </div>
-        <?php
-            }
-        ?>
+      <?php
+          $postid = new \MongoDB\BSON\ObjectId($_GET['postid']);
+          getcomment($postid);
+          ?>
     </div>
-	<div class="friend">
-		<h2>Friends</h2>
-		<?php
+    <div class="friend">
+        <h2>Friends</h2>
+        <?php
             $friends = getFriends($_SESSION['email']);
             if($friends!=null){
                 foreach($friends as $friend){
@@ -293,10 +223,12 @@ body {
                 }
             }
             ?>
-	</div>
+    </div>
 </div>
 </body>
 </html>
+
+
 
 
 
